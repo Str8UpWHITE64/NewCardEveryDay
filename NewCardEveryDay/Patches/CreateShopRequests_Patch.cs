@@ -15,7 +15,7 @@ namespace KitchenNewCardEveryDay
         public static bool OnUpdate_PrefixPatch(CreateShopRequests __instance)
         {
             Traverse CSR = Traverse.Create(__instance);
-            EntityQuery dayQuery = CSR.Field("_SingletonEntityQuery_SDay_54").GetValue<EntityQuery>();
+            EntityQuery dayQuery = CSR.Field("_SingletonEntityQuery_SDay_50").GetValue<EntityQuery>();
             EntityQuery shopRemover = CSR.Field("ShopRemover").GetValue<EntityQuery>();
 
             int num = 0;
