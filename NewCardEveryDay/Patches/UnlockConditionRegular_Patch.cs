@@ -11,19 +11,16 @@ namespace KitchenNewCardEveryDay
         [HarmonyPrefix]
         public static bool ShouldProvide_PrefixPatch(UnlockConditionRegular __instance, ref bool __result, List<Unlock> candidates, HashSet<int> current_cards, UnlockRequest request)
         {
-            //set dayInterval to how often you want cards
-            int dayInterval = 1;
-            int dayOffset = __instance.DayOffset;
+            bool isThemeDay = request.Day / 5 == 1 && request.Day % 5 == 0;
+            FileLog.Log("isThemeDay: " + isThemeDay);
+            bool isFranchiseDay = request.Day / 15 == 1 && request.Day % 15 == 0;
+            FileLog.Log("isFranchiseDay: " + isFranchiseDay);
+            bool isStartingDay = request.Day == 0;
+            bool isSpecialDay = isThemeDay || isFranchiseDay || isStartingDay;
+            bool isRegularDay = (request.Day - __instance.DayOffset) % 1 == 0 && !isSpecialDay;
+            FileLog.Log("isRegularDay: " + isRegularDay);
 
-            //if day <= DayMax or DayMax <= 0
-            bool maxDay = request.Day <= __instance.DayMax || __instance.DayMax <= 0;
-            //if day >= DayMin or DayMin <= 0
-            bool minDay = request.Day >= __instance.DayMin || __instance.DayMin <= 0;
-            //if (day - DayOffset) % DayInterval != 0
-            bool dayInt = (request.Day - dayOffset) % dayInterval != 0;
-            //if tier == Tier or DayMax <= 0
-            bool reqTier = request.Tier == __instance.TierRequired || __instance.TierRequired <= 0;
-            __result = maxDay && minDay && dayInt && reqTier;
+            __result = isRegularDay;
             return false;
         }
     }
